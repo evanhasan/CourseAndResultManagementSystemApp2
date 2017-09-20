@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - IIT Course Management System</title>
+    <link href="~/Content/images/IITFavicon.gif" rel="shortcut icon" type="image/x-gif" />
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <style>
+        .menu li a {
+            color: white !important;
+            text-decoration: none;
+        }
+
+        .menu li li a {
+            color: black !important;
+            text-decoration: none;
+        }
+
+        .menu li a:hover {
+            color: black !important;
+            text-decoration: none;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top " style="background-color: teal;">
+
+          <div class="container">
+                    <div class="navbar-header menu">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <li> @Html.ActionLink("IIT Course Management System", "Index", "Index", new { area = "" }, new { @class = "navbar-brand" })</li>
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav menu">
+                            <li>@Html.ActionLink("Admin Login", "LoginAdmin", "Admins")</li>
+                            @*<li>@Html.ActionLink("Admin Login", "LoginMaster", "MasterUser")</li>*@
+                            <li>@Html.ActionLink("Faculty Login", "LoginTeacher", "Teachers")</li>
+                            <li>@Html.ActionLink("Student Login", "LoginStudent", "Students")</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container body-content">
+                @RenderBody()
+
+
+
+                <hr />
+                <footer>
+                    <p>&copy; @DateTime.Now.Year - Course Management System Application by Md. Abul Hasan</p>
+                </footer>
+            </div>
+
+            <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+            <script src="~/Scripts/bootstrap.min.js"></script>
+        </body>
+</html>

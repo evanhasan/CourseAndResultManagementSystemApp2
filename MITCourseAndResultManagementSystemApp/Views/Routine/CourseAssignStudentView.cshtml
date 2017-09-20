@@ -1,0 +1,73 @@
+﻿@model IEnumerable<MITCourseAndResultManagementSystemApp.Models.ViewModel.CourseDepartment>
+
+@{
+    ViewBag.Title = "CourseAssignStudentView";
+    Layout = "~/Views/Shared/StudentMasterSharedLayout.cshtml";
+}
+
+<h4>Course Assigned for Student</h4>
+
+<p>
+    
+</p>
+<table class="table">
+    <tr>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.Semester)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CourseName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TeacherName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Credit)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Flag)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.Semester)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CourseName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TeacherName)
+        </td>
+        <td>
+            @if (item.Credit <=0)
+            {
+                @Html.Label("-")
+            }
+            else
+            {
+                @Html.DisplayFor(modelItem => item.Credit)
+            }
+        </td>
+        <td>
+            @if (item.Flag == 1)
+            {
+                @Html.Label("Assigned")
+            }
+            else
+            {
+                @Html.Label("Semester is over or Unassigned")
+            }
+           
+        </td>
+        <td>
+      
+        </td>
+    </tr>
+}
+
+</table>

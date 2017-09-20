@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> IIT Course Management System Application</title>
+
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+
+
+    <script src="~/Scripts/jquery-3.1.1.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+
+    <script>
+        $(document).ready(function () {
+            $('.dropdown-toggle').dropdown();
+        });
+
+    </script>
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top " style="background-color: navy;">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Staff ", "AdminStaff", "Admins", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+
+                <ul class="nav navbar-nav">
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Course<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Course Assign", "Index", "CourseAssigns")</li>
+                            <li>@Html.ActionLink("Unassign Course", "UnassignCourse", "Unassign")</li>
+                            <li>@Html.ActionLink("View Course by Dep", "CourseByDepartment", "Departments")</li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Class Room <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+
+                            <li>@Html.ActionLink("Assigns Room", "Index", "RoomAssigns")</li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Users<b class="caret"></b></a>
+                        <ul class="dropdown-menu">                          
+                            <li>@Html.ActionLink("Create Faculty member", "Index", "Teachers")</li>
+                            <li>@Html.ActionLink("Create Admin", "Register", "MasterUser")</li>
+                            <li>@Html.ActionLink("Create Student", "Index", "Students")</li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Add Degree", "Index", "Departments")</li>
+                            <li>@Html.ActionLink("Add Batch", "Index", "Batches")</li>
+                            <li>@Html.ActionLink("Add Courses", "Index", "Courses")</li>
+                            <li>@Html.ActionLink("Add Room", "Index", "Rooms")</li>
+                            <li>@Html.ActionLink("Add Day", "Index", "Days")</li>
+                            <li>@Html.ActionLink("Logout", "Logout", "Admins")</li>
+                        </ul>
+                    </li>
+
+
+                </ul>
+            </div>
+
+
+
+        </div>
+    </div>
+  
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Course Management System Application by Md. Abul Hasan</p>
+        </footer>
+    </div>
+
+
+
+
+    
+    
+</body>
+</html>

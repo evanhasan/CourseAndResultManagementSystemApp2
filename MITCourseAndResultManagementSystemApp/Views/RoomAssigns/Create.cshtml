@@ -1,0 +1,174 @@
+﻿@using System.Web.UI.WebControls
+@model MITCourseAndResultManagementSystemApp.Models.RoomAssign
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/MasterPageLayout.cshtml";
+    if (ViewBag.Message == null)
+    {
+        ViewBag.Message = null;
+    }
+}
+
+<h4>Room Assign</h4>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.DepartmentId, "DepartmentId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("DepartmentId", null, "Select..", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.BatchId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("BatchId", Enumerable.Empty<SelectListItem>(), "Select..", htmlAttributes: new { @class = "form-control" })
+                
+                @Html.ValidationMessageFor(model => model.BatchId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CourseId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CourseId", Enumerable.Empty<SelectListItem>(),"Select", htmlAttributes : new { @class = "form-control"})
+                @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SemesterId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="text" class="form-control" name="SemesterId" id="SemesterId" />
+               
+                @Html.ValidationMessageFor(model => model.SemesterId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.RoomId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("RoomId",ViewBag.Room as SelectList,"Select.." , htmlAttributes : new { @class = "form-control" } )
+                @Html.ValidationMessageFor(model => model.RoomId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Day, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Day", ViewBag.Day as SelectList,"Select",  htmlAttributes : new { @class = "form-control" } )
+                @Html.ValidationMessageFor(model => model.Day, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StartTime, htmlAttributes: new { @class = "control-label col-md-2", PlaceHolder = "Hour" })
+            <div class="col-md-10">
+                
+                <input type="time" name="StartTime"/>
+                @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EndTime, htmlAttributes: new { @class = "control-label col-md-2", PlaceHolder = "Hour" })
+          
+            <div class="col-md-10">
+                <input type="time" name="EndTime" />
+                
+               @Html.ValidationMessageFor(model => model.EndTime, "", new { @class = "text-danger" })
+                
+               
+            </div>
+        </div>
+
+                <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />@ViewBag.Message
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+<script src="~/Scripts/jquery-3.1.1.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script>
+    $("#DepartmentId").change(function () {
+        var DepartmentId = $("#DepartmentId").val();
+        if (DepartmentId > 0) {
+            $.ajax({
+                url: '@Url.Action("GetBatchList", "CourseAssigns")',
+                data: { DepartmentId: DepartmentId },
+                success: function (result) {
+                    var Options = "<Option value=' '>Select..</Option>";
+                    for (var i = 0; i < result.length; i++) {
+                        Options = Options + "<Option value='"+result[i]['Id']+"'>" + result[i]['BatchNo'] + "</Option>";
+                    }
+                    $("#BatchId").empty();
+                    $("#BatchId").append(Options);
+                }
+            });
+
+        }
+
+    });
+</script>
+@* Get Course list *@
+<script>
+    $("#DepartmentId").change(function () {
+        var DepartmentId = $("#DepartmentId").val();
+        if (DepartmentId > 0) {
+            $.ajax({
+                url: '@Url.Action("GetCourseList", "RoomAssigns")',
+                data: { DepartmentId: DepartmentId },
+                success: function (result) {
+                    var Options = "<Option value=' '>Select..</Option>";
+                    for (var i = 0; i < result.length; i++) {
+                        Options = Options + "<Option value='"+result[i]['Id']+"'>" + result[i]['CourseName'] + "</Option>";
+                    }
+                    $("#CourseId").empty();
+                    $("#CourseId").append(Options);
+                }
+            });
+        }
+    });
+
+</script>
+@* Get semseter *@
+<script>
+    $("#CourseId").change(function () {
+        var CourseId = $("#CourseId").val();
+        if (CourseId > 0) {
+            $.ajax({
+                url: '@Url.Action("GetCourseSemesterList", "RoomAssigns")',
+                data: { CourseId: CourseId },
+                success: function (result) {
+                    $("#SemesterId").empty();
+                    $("#SemesterId").val(result);
+                }
+            });
+        }
+    });
+
+</script>

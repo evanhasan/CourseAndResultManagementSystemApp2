@@ -1,0 +1,27 @@
+﻿@model MITCourseAndResultManagementSystemApp.Models.Day
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/MasterPageLayout.cshtml";
+}
+
+<h4>Details</h4>
+
+<div>
+   
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DayName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DayName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

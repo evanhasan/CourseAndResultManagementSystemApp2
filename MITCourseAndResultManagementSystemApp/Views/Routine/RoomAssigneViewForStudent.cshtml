@@ -1,0 +1,72 @@
+﻿@model IEnumerable<MITCourseAndResultManagementSystemApp.Models.ViewModel.RoomAssignViewModel>
+
+@{
+    ViewBag.Title = "RoomAssigneViewForStudent";
+    Layout = "~/Views/Shared/StudentMasterSharedLayout.cshtml";
+}
+
+<h4>Room Assigne View For Student</h4>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Day)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Department)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Semester)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.CourseName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoomNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Duration)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        var Duration = item.EndTime.TimeOfDay - item.StartTime.TimeOfDay;
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Day)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Department)
+                -
+                @Html.DisplayFor(modelItem => item.BatchNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Semester)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CourseName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoomNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime.TimeOfDay)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndTime.TimeOfDay)
+            </td>
+            <td>
+                @Duration
+            </td>
+        </tr>
+    }
+
+</table>

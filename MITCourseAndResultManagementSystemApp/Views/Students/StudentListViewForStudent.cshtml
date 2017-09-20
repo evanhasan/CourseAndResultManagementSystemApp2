@@ -1,0 +1,24 @@
+﻿@model IEnumerable<MITCourseAndResultManagementSystemApp.Models.ViewModel.StudentListViewModel>
+
+@{
+    ViewBag.Title = "StudentListViewForStudent";
+    Layout = "~/Views/Shared/StudentMasterSharedLayout.cshtml";
+}
+
+<h2>Batchmate  List</h2>
+
+
+
+
+
+@foreach (var item in Model)
+{
+
+    <button title="@Html.DisplayFor(modelItem => item.Email) @Html.DisplayFor(modelItem => item.RegNo)">
+        @Html.DisplayFor(modelItem => item.Name)- (@Html.DisplayFor(modelItem=>item.BloodGroup))
+    </button>
+    <br />
+
+
+
+}

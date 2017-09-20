@@ -1,0 +1,452 @@
+﻿@using System.Net.Mail
+@using System.Web.UI.WebControls
+@using MITCourseAndResultManagementSystemApp.Migrations
+@using MITCourseAndResultManagementSystemApp.Models
+@using MITCourseAndResultManagementSystemApp.Models.ViewModel
+
+@model MITCourseAndResultManagementSystemApp.Models.ShareContent
+
+@{
+    ViewBag.Title = "Teacher View";
+    Layout = "~/Views/Shared/TeacherSharedPage.cshtml";
+    var list = ViewBag.Content;
+}
+<style>
+    a:link {
+        text-decoration: none;
+    }
+
+    .commentdeleationdiv {
+        float: right;
+    }
+
+    .CommentShowDiv {
+        padding: 3px;
+        background-color: papayawhip;
+    }
+
+    .CommentImg {
+        float: left;
+    }
+
+    .ThankBtn {
+        background-color: teal;
+        color: white;
+    }
+
+    .CommentBtn {
+        background-color: teal;
+        color: white;
+    }
+</style>
+
+
+<div class="container-fluid">
+    @* This div right Navbar *@<br />
+    <div class="col-sm-3 bg-info" style="size: 5px;">
+
+        <div>
+            @*Routine*@
+            <h5 class="" style="text-align: center; background-color: teal; color:seashell; padding: 3px; size: 5px;">Class Routine </h5>
+            <table class="table table-hover table-bordered" style="font-size:13px !important; padding-left: 1px;">
+
+                <tr><th>Day</th><th>Sub</th><th>Room</th><th>StartTime</th></tr>
+                @foreach (var item in ViewBag.RoomAssingList)
+                {
+                    var Duration = item.EndTime.TimeOfDay - item.StartTime.TimeOfDay;
+                    <tr>
+                        <td>@item.Day</td>
+                        <td>@item.CourseName</td>
+                        <td>@item.RoomNumber</td>
+                        <td>@item.StartTime.TimeOfDay</td>
+                    </tr>
+                }
+            </table>
+
+            @*course*@
+            <h5 class="" style="text-align: center; background-color: teal; color:seashell; padding: 3px; size: 5px;">Assigned Course</h5>
+            <table class="table table-hover table-bordered" style="font-size:13px !important; padding-left: 1px;">
+
+                <tr>
+                    <th>CourseName</th>
+                    <th>TeacherName</th>
+                </tr>
+                @foreach (var item in ViewBag.ListOfAssignCourse)
+                {
+                    <tr><td>@item.CourseName</td><td>@item.TeacherName</td></tr>
+                }
+            </table>
+
+        </div>
+    </div>
+
+
+
+    @* This div for Teacher post *@
+    <div class="col-sm-6" style="overflow: scroll; height: 870px;">
+        
+      @*Create post*@
+    <div class="col-sm-12" style="border: 1px slategrey solid; background-color: ; padding: 5px;">
+        @using (Html.BeginForm("CreateByFaculty", "ShareContents", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="col-md-12">
+                <div style="background-color: white; padding: 3px;" class="col-md-12">
+                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control col-md-12", PlaceHolder = "Message Title" } })
+                    @*@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })*@
+
+                    @Html.TextAreaFor(model => model.Message, new { htmlAttributes = new { @class = "form-control" }, PlaceHolder = "Write Message here", rows = "3", cols = "100" })
+                    @*@Html.ValidationMessageFor(model => model.Message, "", new { @class = "text-danger" })*@
+
+                    <div style="float: left; background-color: transparent;" class="">@Html.TextBox("Myfile", "", new { type = "file", })</div>
+                    <div style="float: right;background-color: transparent;">
+                        @Html.DropDownList("DepartmentID", null, "Course..")
+                        @Html.DropDownList("BatchId", Enumerable.Empty<SelectListItem>(), "Batch..")
+                        <input type="submit" value="Post" />
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+
+
+        <div style="background-color: white; border-bottom: 1px seagreen solid;"><h4> Last Updates</h4></div>
+        @*Teacher Share Content is Showing bellow*@
+        @foreach (TeacherShareContentViewModel item in ViewBag.Content)
+        {
+            @*//Teacher Info*@
+            <div style="padding: 5px; background-color: snow; margin-right: 2px;">
+                <div class="col-sm-12" style="padding: 0px;">
+                    <div style="background-color: white; margin-left: -20px;" class="col-sm-9">
+                        <div style="float: left; padding: 2px;"><img src="../@item.PhotoPath" width="70" height="70" /></div>
+                        <div style="padding: 2px; padding-top: 5px;">
+                            <h4 style="margin: 0px;"><a href="">@item.TeacherName</a></h4>
+                            <h6 style="margin: 0px;">@item.Designation</h6><h6 style="color: slategrey; margin-top: 2px;">@item.DateTime </h6> <h6 style="margin-top: 1px;color: slategrey;">Posted for - @item.Department - @item.BatchNumber</h6>
+                        </div>
+                    </div>
+                    @*Delete*@
+                    <div class="col-sm-3">
+                        @using (Html.BeginForm("DeleteFromWallFaculty", "ShareContents", FormMethod.Post))
+                        {
+                            <input type="hidden" name="id" value="@item.Id" /><input type="submit" value="Delete" class="btn btn-default" onclick="return ContentDeleteConfirm()" />
+                        }
+                    </div>
+                </div>
+                @*Content*@
+                <div style="float: left; width: 100%">
+                    <h4 style="color: darkgreen">@item.Title </h4> <p style="color: black;white-space: pre-line">@item.Message</p>
+
+                    @if (item.FilePath != "")
+                    {
+                        string ext = Path.GetExtension(item.FilePath);
+                        if (ext == ".jpg" || ext == ".png" || ext == ".Gif")
+                        {
+                            <br />
+                            <p> <img src="../@item.FilePath" width='100%' height="300" style="border: 2px midnightblue solid;" onclick="return PhotoViewbyClick(this)" /></p>
+                        }
+                        else
+                        {
+                            <p><a href="../@item.FilePath" style="">Open Attachment</a></p>
+                        }
+                    }
+
+                    @*time of post is showing here*@
+            </div>
+
+                <hr style="margin: 0px;" />
+
+                @*like or thanks button is showing here*@
+
+                @{
+                    string ThanksButtonId = "ThanksButton" + item.Id;
+                    string ThanksCountDivId = "CountThanks" + item.Id;
+
+
+
+                    @*Count number of Thanks*@
+                    int i = 0;
+                    foreach (var Thanks in ViewBag.Thanks)
+                    {
+                        if (Thanks.PostId == @item.Id)
+                        {
+                            if (Thanks.Thanks == 1)
+                            {
+                                i++;
+                            }
+                        }
+                    }
+                }
+                @*count Number show*@
+                <div>
+                    <span id="@ThanksCountDivId">@i &nbsp; Peoples Thank</span>
+
+                    @*//To See Comment Click the Button*@
+                    <button class="btn btn-xs CommentBtn" data-toggle="collapse" data-target="#@item.Id">Comments</button>
+                </div>
+                <hr style="margin: 0px;" />
+
+            </div>
+
+            @*comment show div and code*@
+            <div id="@item.Id" class="collapse" style="background-color: white; padding: 2px; padding-left: 10px;">
+
+                @foreach (ShareCommentViewModel ItemComment in ViewBag.Comments)
+                {
+                    if (ItemComment.ContentId == item.Id)
+                    {
+                        <div class="commentdeleationdiv">
+                            @* Check previlige to remove comment *@
+                            <a onclick="return  DeleteComment(@ItemComment.CommentId, @item.Id)">x</a>
+                        </div>
+                        @*//this is comment info*@
+
+                        <div>
+                            <div class='CommentImg'> <img src="../@ItemComment.PhotoPath" width="40" height="40" /></div>
+                            <div>
+                                <h5><a href=""> @ItemComment.UserName</a>  @ItemComment.Comment  </h5>
+                                <p>  @ItemComment.CommentTime</p>
+                            </div>
+                        </div>
+
+                    }
+                    else
+                    {
+                        //if any post has no comment at present then this tag will create for future use
+                        <div id="@item.Id">  </div>
+                    }
+                }
+            </div>
+            //ShareComment Box and Submit Button
+            <div class="row">
+                @{
+                    string CommentBoxIDName = "CommentBox" + item.Id;
+                    string SubmitBtnID = "SubmitBtn" + item.Id;
+                }
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <input type="text" class="form-control" style="min-width: 100%" name="Comment" id="@CommentBoxIDName" onkeypress="return SearchKeyPress(event,@item.Id);"></input>
+                        <span class="input-group-btn">
+                            <input type="submit" class="hidden" name="CommentSubmit" id="@SubmitBtnID" value="Comment" onclick="return CommentSubmitByClick(@item.Id,@Session["TeacherId"],1)" />
+                        </span>
+                        <hr />
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+
+
+    @* This div right Navbar *@
+    <div class="col-sm-3 bg-info" style="size: 5px; float: right;">
+
+        <div>
+            @*Classmates*@
+            <h5 class="" style="text-align: center; background-color: teal; color:seashell; padding: 3px; size: 5px;">Students </h5>
+
+            <div style="height: 400px; overflow: scroll;">
+                <table class="table" style="">
+                    @*<tr><th>Day</th><th>Sub</th><th>StartTime</th></tr>*@
+                    @*@foreach (var item in ViewBag.StudentsList)
+                        {
+                            <tr>
+                                <td title="@item.Email"><img src="../@item.PhotoPath" width="50" height="50" /></td>
+                                <td>@item.Name- @item.RollNumber</td>
+                                <td>@item.BloodGroup </td>
+                            </tr>
+                        }*@
+
+                </table>
+            </div>
+            @*course list all*@
+            <h5 class="" style="text-align: center; background-color: teal; color:seashell; padding: 3px; size: 5px;">Course List Full </h5>
+            <div style="height: 400px; overflow: scroll;">
+                <table class="table" style="">
+                    @*@foreach (var item in ViewBag.CourseListAll)
+                        {
+                            <tr><td>@item.CourseCode</td><td>@item.CourseName</td></tr>
+                        }*@
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@*when click on photo then it will be appaired with this div and popup*@
+<div id="ViewPhotoPopup"></div>
+
+@*new Comment submit and show list again  script *@
+
+<script>
+    function SearchKeyPress(e, ItemId) {
+        // look for window.event in case event isn't passed in
+        e = e || window.event;
+        if (e.keyCode == 13) {
+            document.getElementById("SubmitBtn" + ItemId).click();
+            return false;
+        }
+        return true;
+    }
+
+    function CommentSubmitByClick(PostId, x, Flag) {
+        //here "y" is represent this is thacher user who comments on own post
+        var CommentBoxIDName = "CommentBox" + PostId;
+        var Comment = $("#" + CommentBoxIDName).val().trim();
+        if (Comment == "") Comment = null;
+        if (PostId != null && Comment != null) {
+            $.ajax({
+                url: '@Url.Action("CommentSubmitByClick", "ShareContents")',
+                data: { PostId: PostId, x: x, Comment: Comment, Flag: Flag },
+                success: function (result) {
+                    var CommentList = "";
+                    for (var i = 0; i < result.length; i++) {
+                        //Comment Deleation  previlige check teacher will be able to delete any comment
+
+                        CommentList = CommentList + "<div>" +
+                            "<div class='commentdeleationdiv'><a onclick='return DeleteComment(" + result[i]['CommentId'] + "," + result[i]['ContentId'] + ")'>x</a></div>" +
+                            " <div><div class='CommentImg'> <img src='../" + result[i]['PhotoPath'] + "' width='40' height='40' /></div>" +
+                            "<div class=''><h5><a href=''>" + result[i]['UserName'] + "</a> " + result[i]['Comment'] + "</h5>"
+                            + "<p  style='color: slategrey'>" + result[i]['CommentTime'] + "</p></div></div";
+
+
+                    }
+                    $("#" + CommentBoxIDName).val("");
+                    $("#" + PostId).empty();
+                    $("#" + PostId).append(CommentList);
+                    $("#" + PostId).collapse();
+                }
+            });
+        }
+
+    };
+</script>
+<script>
+    function FocusButton(Id) {
+        var SubmitBtnID = "SubmitBtn" + Id;
+
+    }
+</script>
+<script src="~/Scripts/bootstrap-confirmation.js"></script>
+@*Thanks Button Action*@
+<script>
+    function ThanksButton(PostId, x) {
+        if (PostId != null) {
+            $.ajax({
+                url: '@Url.Action("ThanksButtonClick", "ShareContents")',
+                data: { PostId: PostId, x: x, Flag: 1 },
+                success: function (result) {
+
+                    if (result['Status'] == 1) {
+                        $("#ThanksButton" + PostId).val = '';
+                        $("#ThanksButton" + PostId).val('Thanked');
+                        $("#CountThanks" + PostId).empty();
+                        $("#CountThanks" + PostId).append(" " + result['ThanksCount'] + '&nbsp; Peoples Thanked');
+                    }
+                    else {
+                        $("#ThanksButton" + PostId).val = '';
+                        $("#ThanksButton" + PostId).val('Thanks');
+                        $("#CountThanks" + PostId).empty();
+                        $("#CountThanks" + PostId).append(" " + result['ThanksCount'] + ' &nbsp; Peoples Thanked');
+                    }
+
+                }
+
+            });
+        }
+    };
+
+</script>
+
+@*photo view dialog*@
+<script>
+    function PhotoViewbyClick(e) {
+        var photo = "<img src='" + e.src + "'/>";
+
+        $("#ViewPhotoPopup").empty();
+        $("#ViewPhotoPopup").append(photo)
+        $("#ViewPhotoPopup").dialog({
+            resizable: false,
+            height: 600,
+            modal: true,
+            minWidth: 900,
+            buttons: {
+                Close: function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    }
+</script>
+
+@*Comment Deleation*@
+<script>
+    function DeleteComment(x, y) {
+
+        if (x > 0) {
+            var con = confirm("Are you sure want to delete");
+            if (con == true) {
+                $.ajax({
+                    url: '@Url.Action("CommentDeletebyClick", "ShareContents")',
+                    data: { CommentId: x, ContentId: y },
+                    success: function (result) {
+
+                        var CommentList = "";
+                        for (var i = 0; i < result.length; i++) {
+
+                            //Comment Deleation  previlige check teacher will be able to delete any comment
+                            CommentList = CommentList + "<div>" +
+                                "<div class='commentdeleationdiv'><a onclick='return DeleteComment(" + result[i]['CommentId'] + "," + result[i]['ContentId'] + ")'>x</a></div>" +
+                                " <div><div class='CommentImg'> <img src='../" + result[i]['PhotoPath'] + "' width='40' height='40' /></div>" +
+                                "<div class=''><h5><a href=''>" + result[i]['UserName'] + "</a> " + result[i]['Comment'] + "</h5>"
+                                + "<p  style='color: slategrey'>" + result[i]['CommentTime'] + "</p></div></div";
+                        }
+
+                        $("#" + y).empty();
+                        $("#" + y).append(CommentList);
+                        $("#" + y).collapse();
+
+                    }
+
+                });
+            }
+
+        }
+
+    }
+
+
+</script>
+@*Create Post*@
+<script src="~/Scripts/jquery-3.1.1.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+<script>
+    $("#DepartmentID").change(function () {
+        var DepartmentId = $("#DepartmentID").val();
+        if (DepartmentId > 0) {
+            $.ajax({
+                url: '@Url.Action("GetBatchList", "CourseAssigns")',
+                data: { DepartmentId: DepartmentId },
+                success: function (result) {
+                    var Options = "<Option value=' '>Select..</Option>";
+                    for (var i = 0; i < result.length; i++) {
+                        Options = Options + "<Option value='" + result[i]['Id'] + "'>" + result[i]['BatchNo'] + "</Option>";
+                    }
+                    $("#BatchId").empty();
+                    $("#BatchId").append(Options);
+                }
+            });
+
+        }
+
+    });
+
+    function ContentDeleteConfirm() {
+        return confirm("Are you sure want to delete?");
+    }
+</script>

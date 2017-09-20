@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <link href="~/Content/images/IITFavicon.gif" rel="shortcut icon" type="image/x-gif" />
+    <title> IIT Course Management System Application</title>
+   
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+
+
+    <script src="~/Scripts/jquery-3.1.1.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+
+    <script>
+        $(document).ready(function () {
+            $('.dropdown-toggle').dropdown();
+        });
+
+    </script>
+    <style>
+        .menu li a {
+            color: white !important;
+            text-decoration: none;
+        }
+
+        .menu li li a {
+            color: black !important;
+            text-decoration: none;
+        }
+
+        .menu li a:hover {
+            color: white !important;
+            text-decoration: none;
+            background-color: black;
+        }
+    </style>
+
+
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top " style="background-color: teal;">
+        <div class="container">
+            <div class="navbar-header menu">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @{
+                    var name = Session["AdminName"].ToString();
+                }
+                <p> @Html.ActionLink(name, "AdminView", "ShareContentAdmin", new { area = "" }, new { @class = "navbar-brand" })</p>
+            </div>
+            <div class="navbar-collapse collapse">
+
+                <ul class="nav navbar-nav menu">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Post<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Post Submit", "Admin", "ShareContentAdmin")</li>
+                            <li>@Html.ActionLink("See Wall", "AdminView", "ShareContentAdmin")</li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Subjects<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Subject Assign", "Index", "CourseAssigns")</li>
+                            <li>@Html.ActionLink("Unassign Subject", "UnassignCourse", "Unassign")</li>
+                            <li>@Html.ActionLink("View Subjects as Course", "CourseByDepartment", "Departments")</li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Class Room <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+
+                            <li>@Html.ActionLink("Assigns Room", "Index", "RoomAssigns")</li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Users<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Faculty Members", "Index", "Teachers")</li>
+                            <li>@Html.ActionLink("Students", "Index", "Students")</li>
+                            <li>@Html.ActionLink("Admins", "Index", "Admins")</li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Add Course", "Index", "Departments")</li>
+                            <li>@Html.ActionLink("Add Batch", "Index", "Batches")</li>
+                            <li>@Html.ActionLink("Add Subject", "Index", "Courses")</li>
+                            <li>@Html.ActionLink("Add Room", "Index", "Rooms")</li>
+                            <li>@Html.ActionLink("Add Day", "Index", "Days")</li>
+
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Profile", "Index", "Teachers")</li>
+                            <li>@Html.ActionLink("Change Password", "ChangePassword", "Admins")</li>
+                            <li>@Html.ActionLink("Logout", "Logout", "Admins")</li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <div class="container body-content" style="width: 100%">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Course Management System Application by Md. Abul Hasan</p>
+        </footer>
+    </div>
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+﻿@model MITCourseAndResultManagementSystemApp.Models.ChangePassword
+@{
+    ViewBag.Title = "Faculty Password Reset Requiest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Change Password</h2>
+
+@using (Html.BeginForm())
+{
+    <input type="hidden" name="UserId" value="@ViewBag.AccountId">
+
+    <div class="form-horizontal">
+      
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.NewPassword, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NewPassword, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NewPassword, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ConfirmNewPassword, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ConfirmNewPassword, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ConfirmNewPassword, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+
+            <div class="col-md-10">
+                <input type="submit" name="Submit" value="Change" class="btn btn-success" />
+                @{
+                    if (ViewBag.Message != null)
+                    {
+                        @ViewBag.Message
+                    }}
+            </div>
+            @Html.ActionLink("Login","LoginTeacher","Teachers")
+        </div>
+    </div>
+
+
+
+}
+
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery-3.1.1.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

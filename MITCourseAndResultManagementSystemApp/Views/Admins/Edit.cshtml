@@ -1,0 +1,126 @@
+﻿@model MITCourseAndResultManagementSystemApp.Models.Admin
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/MasterPageLayout.cshtml";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+    
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.UserId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Designation, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select name="Designation" class="form-control">
+                    <option value="@Model.Designation ">@Model.Designation </option>
+                    <option value="Professor ">Professor </option>
+                    <option value="Associate Professor ">Associate Professor </option>
+                    <option value="Assistant Professor ">Assistant Professor </option>
+                    <option value="Lecturer. ">Lecturer </option>
+                    <option value="Assistant Lecturer ">Assistant Lecturer </option>
+                    <option value="Lecturer Candidate ">Lecturer Candidate </option>
+                    <option value="Assistant Lecturer Candidate ">Assistant Lecturer Candidate </option>
+                    <option value="Staff">Staff </option>
+
+                </select>
+                @Html.ValidationMessageFor(model => model.Designation, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PhoneNo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PhoneNo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PhoneNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @{
+    string Power = "";
+    if (Model.Power == 1)
+    {
+        Power = "Director";
+
+    }
+    if (Model.Power == 2)
+    {
+        Power = "Moderator";
+    }
+    if (Model.Power == 3)
+    {
+        Power = "Batch Co-Ordinator";
+
+    }
+    if (Model.Power == 4)
+    {
+        Power = "Staff";
+    }
+        }
+        <div class="form-group">
+            @Html.LabelFor(model => model.Power, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select name="Power" class="form-control">
+                    <option value="@Model.Power">@Power</option>
+                    <option value="1">Director</option>
+                    <option value="2">Moderator</option>
+                    <option value="3">Batch Co-Ordinator</option>
+                    <option value="4">Staff</option>
+                </select>
+                @Html.ValidationMessageFor(model => model.Power, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+            @Html.HiddenFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+
+            @Html.HiddenFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
+
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    @Html.HiddenFor(model => model.PhotoPath)
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
